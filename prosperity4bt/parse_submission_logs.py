@@ -40,7 +40,7 @@ def parse_trades(trade_history: str, output_dir: Path, round_day: str) -> None:
 
 def main() -> None:
     parser = ArgumentParser(
-        description="Save prices and trades data in submission logs to prosperity3bt's resources module.",
+        description="Save prices and trades data in submission logs to prosperity4bt's resources module.",
     )
     parser.add_argument("file", type=str, help="path to the log file")
     parser.add_argument("round", type=int, help="round the logs belong to")

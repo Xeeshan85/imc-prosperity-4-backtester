@@ -5,21 +5,8 @@ from prosperity4bt.datamodel import Symbol, Trade
 from prosperity4bt.file_reader import FileReader
 
 LIMITS = {
-    "RAINFOREST_RESIN": 50,
-    "KELP": 50,
-    "SQUID_INK": 50,
-    "CROISSANTS": 250,
-    "JAMS": 350,
-    "DJEMBES": 60,
-    "PICNIC_BASKET1": 60,
-    "PICNIC_BASKET2": 100,
-    "VOLCANIC_ROCK": 400,
-    "VOLCANIC_ROCK_VOUCHER_9500": 200,
-    "VOLCANIC_ROCK_VOUCHER_9750": 200,
-    "VOLCANIC_ROCK_VOUCHER_10000": 200,
-    "VOLCANIC_ROCK_VOUCHER_10250": 200,
-    "VOLCANIC_ROCK_VOUCHER_10500": 200,
-    "MAGNIFICENT_MACARONS": 75,
+    "EMERALDS": 80,
+    "TOMATOES": 80,
 }
 
 
