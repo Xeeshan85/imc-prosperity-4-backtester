@@ -1,0 +1,60 @@
+[project]
+name = "prosperity4bt"
+description = "Backtester for IMC Prosperity 4 algorithms (based on Jasper van Merle's Prosperity 3 Backtester)"
+version = "0.0.0"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [{name = "Xeeshan", email = "mzeeshan.p0615@gmail.com"}]
+keywords = ["imc", "prosperity", "backtest", "backtester"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
+requires-python = ">= 3.9"
+dependencies = [
+    "ipython>=8.18.1",
+    "jsonpickle>=4.0.2",
+    "orjson>=3.10.15",
+    "tqdm>=4.67.1",
+    "typer>=0.15.2",
+]
+
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+prosperity4bt = "prosperity4bt.__main__:main"
+
+[project.urls]
+Repository = "https://github.com/xeeshan85/imc-prosperity-4-backtester"
+Issues = "https://github.com/xeeshan85/imc-prosperity-4-backtester/issues"
+Changelog = "https://github.com/xeeshan85/imc-prosperity-4-backtester/releases"
+
+[tool.setuptools.packages.find]
+include = ["prosperity4bt", "prosperity4bt.*"]
+
+[tool.setuptools.package-data]
+prosperity4bt = ["resources/*/*.csv"]
+
+[tool.uv]
+dev-dependencies = [
+    "mypy>=1.15.0",
+    "ruff>=0.9.7",
+]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+extend-select = ["I"]
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "prosperity4bt.datamodel"
+ignore_errors = true
