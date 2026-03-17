@@ -86,3 +86,7 @@ Follow these steps if you want to make changes to the backtester:
 4. Create a venv with `uv venv` and activate it.
 5. Run `uv sync`.
 6. Any changes you make are now automatically taken into account the next time you run `prosperity4btx` inside the venv.
+
+## Acknowledgments
+
+This backtester is a port of [jmerle's Prosperity 3 backtester](https://github.com/jmerle/imc-prosperity-backtester) adapted for Prosperity 4. Special thanks to Jesper Merle for the original implementation.
