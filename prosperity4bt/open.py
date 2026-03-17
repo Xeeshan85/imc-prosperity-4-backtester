@@ -29,7 +29,7 @@ def open_visualizer(output_file: Path) -> None:
     http_server = CustomHTTPServer(("localhost", 0), http_handler)
 
     webbrowser.open(
-        f"https://jmerle.github.io/imc-prosperity-4-visualizer/?open=http://localhost:{http_server.server_port}/{output_file.name}"
+        f"https://jmerle.github.io/imc-prosperity-3-visualizer/?open=http://localhost:{http_server.server_port}/{output_file.name}"
     )
 
     while not http_server.shutdown_flag:
