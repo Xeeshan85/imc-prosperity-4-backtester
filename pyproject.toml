@@ -1,5 +1,5 @@
 [project]
-name = "prosperity4bt"
+name = "prosperity4btx"
 description = "Backtester for IMC Prosperity 4 algorithms (based on Jasper van Merle's Prosperity 3 Backtester)"
 version = "0.0.0"
 readme = "README.md"
@@ -27,7 +27,7 @@ requires = ["setuptools >= 61.0"]
 build-backend = "setuptools.build_meta"
 
 [project.scripts]
-prosperity4bt = "prosperity4bt.__main__:main"
+prosperity4btx = "prosperity4bt.__main__:main"
 
 [project.urls]
 Repository = "https://github.com/xeeshan85/imc-prosperity-4-backtester"
