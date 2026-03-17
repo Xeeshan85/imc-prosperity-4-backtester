@@ -41,10 +41,11 @@ include = ["prosperity4bt", "prosperity4bt.*"]
 prosperity4bt = ["resources/*/*.csv"]
 
 [tool.uv]
-dev-dependencies = [
+dependency-groups = { dev = [
+    "build>=1.0.0",
     "mypy>=1.15.0",
     "ruff>=0.9.7",
-]
+] }
 
 [tool.ruff]
 line-length = 120
