@@ -89,4 +89,4 @@ Follow these steps if you want to make changes to the backtester:
 
 ## Acknowledgments
 
-This backtester is a port of [jmerle's Prosperity 3 backtester](https://github.com/jmerle/imc-prosperity-backtester) adapted for Prosperity 4. Special thanks to Jesper Merle for the original implementation.
+This backtester is a port of [jmerle's Prosperity 3 backtester](https://github.com/jmerle/imc-prosperity-3-backtester) adapted for Prosperity 4. Special thanks to Jesper Merle for the original implementation.
