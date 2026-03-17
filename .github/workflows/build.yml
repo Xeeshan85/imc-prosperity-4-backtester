@@ -30,7 +30,7 @@ jobs:
         run: sed -i 's/version = "0.0.0"/version = "'"${GITHUB_REF##*/}"'"/g' pyproject.toml
 
       - name: Build
-        run: uv build
+        run: uv run python -m build
 
       - name: Upload
         uses: actions/upload-artifact@v4

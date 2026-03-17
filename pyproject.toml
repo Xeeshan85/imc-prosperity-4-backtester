@@ -54,6 +54,8 @@ extend-select = ["I"]
 
 [tool.mypy]
 ignore_missing_imports = true
+explicit_package_bases = true
+namespace_packages = true
 
 [[tool.mypy.overrides]]
 module = "prosperity4bt.datamodel"
