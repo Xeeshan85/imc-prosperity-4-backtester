@@ -173,7 +173,7 @@ def format_path(path: Path) -> str:
 
 def version_callback(value: bool) -> None:
     if value:
-        print(f"prosperity4btx {metadata.version(__package__)}")
+        print(f"prosperity4btx {metadata.version('prosperity4btx')}")
         sys.exit(0)
 
 
