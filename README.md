@@ -51,6 +51,9 @@ $ prosperity4btx example/starter.py 1 --data prosperity4bt/resources
 $ prosperity4btx example/starter.py 1 --print
 ```
 
+
+
+
 ## Order Matching
 
 Orders placed by `Trader.run` at a given timestamp are matched against the order depths and market trades of that timestamp's state. Order depths take priority, if an order can be filled completely using volume in the relevant order depth, market trades are not considered. If not, the backtester matches your order against the timestamp's market trades. In this case the backtester assumes that for each trade, the buyer and the seller of the trade are willing to trade with you instead at the trade's price and volume. Market trades are matched at the price of your orders, e.g. if you place a sell order for €9 and there is a market trade for €10, the sell order is matched at €9 (even though there is a buyer willing to pay €10, this appears to be consistent with what the official Prosperity environment does).
@@ -61,6 +64,19 @@ Matching orders against market trades can be configured through the `--match-tra
 - `--match-trades none`: do not match market trades against orders.
 
 Limits are enforced before orders are matched to order depths. If for a product your position would exceed the limit, assuming all your orders would get filled, all your orders for that product get canceled.
+
+## Visualizer
+
+You can visualize your backtest results using [jmerle's IMC Prosperity 3 Visualizer](https://github.com/jmerle/imc-prosperity-3-visualizer):
+
+1. Visit the [visualizer web link](https://jmerle.github.io/imc-prosperity-3-visualizer/?/visualizer)
+2. Follow the instructions in the repository to copy the `Logger` class into your code
+3. Run the backtester with output enabled:
+   ```sh
+   prosperity4btx main.py 0 --out output.log
+   ```
+4. Upload the generated `output.log` file to the visualizer
+5. Your backtest results will be displayed interactively!
 
 ## Data Files
 
