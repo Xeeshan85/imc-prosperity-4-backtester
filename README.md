@@ -15,7 +15,7 @@ $ pip install -U prosperity4btx
 $ prosperity4btx <path to algorithm file> 0
 ```
 
-Run `pip install -U prosperity4btx` again when you want to update the backtester to the latest version.
+Run `pip install -U prosperity4btx` again when you want to update the backtester to the latest version. You must do this after every round's data becomes available for the backtester to work on new data.
 
 Some more usage examples:
 ```sh
