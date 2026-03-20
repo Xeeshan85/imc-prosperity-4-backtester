@@ -73,19 +73,19 @@ Limits are enforced before orders are matched to order depths. If for a product 
 You can visualize your backtest results interactively using [jmerle's IMC Prosperity 3 Visualizer](https://github.com/jmerle/imc-prosperity-3-visualizer). This allows you to inspect trades, positions, and market data in detail.
 
 **Setup:**
-1. Follow the repository instructions to copy the `Logger` class into your trading algorithm
-2. Import and use the logger in your `Trader.run()` method to capture detailed trade information
+1. Open the [visualizer web interface](https://jmerle.github.io/imc-prosperity-3-visualizer/?/visualizer)
+2. Follow the instructions to copy the `Logger` class into your trading algorithm
+3. Import and use the logger in your `Trader.run()` method to capture detailed trade information
 
-3. **Generate backtest output:**
+4. **Generate backtest output:**
    ```sh
    prosperity4btx main.py 0 --out output.log
    ```
 
    You can also use `--merge-pnl` to merge profit/loss across multiple days, or skip the `--out` flag to save to the default backtests folder.
 
-   4. Open the [visualizer web interface](https://jmerle.github.io/imc-prosperity-3-visualizer/?/visualizer)
-   5. Upload your generated `output.log` file
-   6. Explore your backtest results interactively!
+5. Upload your generated `output.log` file
+6. Explore your backtest results interactively!
 
 ## Data Files
 
