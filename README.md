@@ -75,7 +75,7 @@ You can visualize your backtest results interactively using [jmerle's IMC Prospe
 **Setup:**
 1. Open the [visualizer web interface](https://jmerle.github.io/imc-prosperity-3-visualizer/?/visualizer)
 2. Follow the instructions to copy the `Logger` class into your trading algorithm
-3. Import and use the logger in your `Trader.run()` method to capture detailed trade information
+3. Import and use the logger in your `Trader.run()` method.
 
 4. **Generate backtest output:**
    ```sh
