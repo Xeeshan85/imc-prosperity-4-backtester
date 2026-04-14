@@ -7,6 +7,8 @@ from prosperity4bt.file_reader import FileReader
 LIMITS = {
     "EMERALDS": 80,
     "TOMATOES": 80,
+    'INTARIAN_PEPPER_ROOT': 80,
+    'ASH_COATED_OSMIUM': 80,
 }
 
 
