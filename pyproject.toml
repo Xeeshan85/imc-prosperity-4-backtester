@@ -1,7 +1,7 @@
 [project]
 name = "prosperity4btx"
 description = "Backtester for IMC Prosperity 4 algorithms (based on Jasper van Merle's Prosperity 3 Backtester)"
-version = "1.0.1"
+version = "1.0.2"
 readme = "README.md"
 license = {file = "LICENSE"}
 authors = [{name = "Xeeshan", email = "mzeeshan.p0615@gmail.com"}]
@@ -38,7 +38,7 @@ Changelog = "https://github.com/xeeshan85/imc-prosperity-4-backtester/releases"
 include = ["prosperity4bt", "prosperity4bt.*"]
 
 [tool.setuptools.package-data]
-prosperity4bt = ["resources/*/*.csv"]
+prosperity4bt = ["py.typed", "resources/**/*.csv"]
 
 [dependency-groups]
 dev = [
