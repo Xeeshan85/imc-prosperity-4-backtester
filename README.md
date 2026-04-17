@@ -91,6 +91,8 @@ You can visualize your backtest results interactively using [jmerle's IMC Prospe
 
 Data for the following rounds is included:
 - Round 0: Tutorial round with prices and anonymized trades data on EMERALDS and TOMATOES. This is the introductory round to learn the basics of the algorithm.
+- Round 1: Prices and trades data on INTARIAN_PEPPER_ROOT and ASH_COATED_OSMIUM products.
+- Round 2: Prices and trades data on INTARIAN_PEPPER_ROOT and ASH_COATED_OSMIUM products.
 
 **Product Limits for Prosperity 4:**
 - EMERALDS: 80
