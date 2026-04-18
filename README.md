@@ -70,22 +70,80 @@ Limits are enforced before orders are matched to order depths. If for a product 
 
 ## Visualizer
 
-You can visualize your backtest results interactively using [jmerle's IMC Prosperity 3 Visualizer](https://github.com/jmerle/imc-prosperity-3-visualizer). This allows you to inspect trades, positions, and market data in detail.
+This repo ships an **enhanced local visualizer** in the [`visualizer/`](./visualizer) directory — a React/TypeScript app built on top of [Highcharts](https://www.highcharts.com/) and [Mantine](https://mantine.dev/).
 
-**Setup:**
-1. Open the [visualizer web interface](https://jmerle.github.io/imc-prosperity-3-visualizer/?/visualizer)
-2. Follow the instructions to copy the `Logger` class into your trading algorithm
-3. Import and use the logger in your `Trader.run()` method.
+### Inspired by
 
-4. **Generate backtest output:**
-   ```sh
-   prosperity4btx main.py 0 --out output.log
-   ```
+| Repo | Role |
+|------|------|
+| [kevin-fu1/imc-prosperity-4-visualizer](https://github.com/kevin-fu1/imc-prosperity-4-visualizer) | Base visualizer (candlestick chart, order book chart, P&L/position charts) |
+| [Xeeshan85/imc-prosperity-4-backtester](https://github.com/Xeeshan85/imc-prosperity-4-backtester) | Backtester this repo is forked from; metrics drawn from its P&L output |
+| [jmerle/imc-prosperity-3-visualizer](https://github.com/jmerle/imc-prosperity-3-visualizer) | Original upstream visualizer (Prosperity 3) |
+| [imc-prosperity-4 (Monte Carlo engine)](../imc-prosperity-4) | Rust Monte Carlo simulator; `session_summary.csv` / `dashboard.json` are loaded by the visualizer |
 
-   You can also use `--merge-pnl` to merge profit/loss across multiple days, or skip the `--out` flag to save to the default backtests folder.
+### What the local visualizer adds
 
-5. Upload your generated `output.log` file
-6. Explore your backtest results interactively!
+Per product, three charts are shown:
+
+1. **Candlestick / Price / Volume** (simple market data) — mid price, bid/ask levels, and volume from the activity log.
+2. **Order Book + Algo Trades** (algo trade data) — filled and unfilled buy/sell orders overlaid on price; requires the Logger boilerplate below.
+3. **Indicators: SMA / EMA / Z-score** (computed from simple mid-price data) — configurable window period and indicator mode switcher.
+
+Global charts and cards:
+
+- **Performance Metrics** — Sharpe ratio, Sortino ratio, max drawdown (absolute and %), win rate, profit factor, avg/std return per timestep, peak/min P&L — all computed from the backtester's activity log P&L series.
+- **P&L chart** — running profit/loss per product and total.
+- **Positions chart** — position as % of limit over time (requires Logger).
+- **Monte Carlo page** — load a `session_summary.csv` (from the Rust MC engine) or `dashboard.json` (from `prosperity4mcbt`) to view a P&L distribution histogram, cumulative distribution (CDF), per-session scatter, and summary statistics.
+
+### Quick start
+
+```sh
+# 1. Start the local dev server
+cd visualizer
+npm install
+npm run dev          # opens http://localhost:5173
+```
+
+Then run your backtest as usual and drag-and-drop the `.log` file into the browser:
+
+```sh
+# Text-format log (default)
+prosperity4btx your_algo.py 0
+
+# Or open the visualizer automatically (tries local dev server first)
+prosperity4btx your_algo.py 0 --vis
+```
+
+The `--vis` flag will:
+1. Try to open `http://localhost:5173` if the dev server is running.
+2. Fall back to the pre-built `visualizer/dist/index.html` if available (`npm run build`).
+3. Fall back to [jmerle's upstream visualizer](https://jmerle.github.io/imc-prosperity-3-visualizer/) as a last resort.
+
+### Logger boilerplate (required for order/position charts)
+
+For the order book overlay and position charts to work, your algorithm must use the `Logger` class and call `logger.flush()` at the end of `Trader.run()`. See [the upstream visualizer README](https://github.com/kevin-fu1/imc-prosperity-4-visualizer) for the full boilerplate.
+
+Price, indicator, P&L, and metrics charts work **without** the Logger.
+
+### Monte Carlo
+
+```sh
+# From the imc-prosperity-4 directory (Rust Monte Carlo engine):
+cd ../imc-prosperity-4
+prosperity4mcbt your_algo.py --sessions 500
+
+# Then in the visualizer, use "Load Monte Carlo results" to drag in:
+#   backtests/<timestamp>_monte_carlo/session_summary.csv
+#   or dashboard.json
+```
+
+### Build (static)
+
+```sh
+cd visualizer
+npm run build        # output in visualizer/dist/
+```
 
 ## Data Files
 

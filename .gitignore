@@ -177,3 +177,7 @@ pyrightconfig.json
 
 # Default output directory
 backtests/
+
+# Visualizer build artifacts
+visualizer/node_modules/
+visualizer/dist/
