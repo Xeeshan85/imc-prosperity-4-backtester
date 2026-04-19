@@ -78,13 +78,6 @@ Limits are enforced before orders are matched to order depths. If for a product 
 
 This repo ships an **enhanced local visualizer** in the [`visualizer/`](./visualizer) directory — a React/TypeScript app built on top of [Highcharts](https://www.highcharts.com/) and [Mantine](https://mantine.dev/).
 
-### Inspired by
-
-| Repo | Role |
-|------|------|
-| [kevin-fu1/imc-prosperity-4-visualizer](https://github.com/kevin-fu1/imc-prosperity-4-visualizer) | Base visualizer (candlestick chart, order book chart, P&L/position charts) |
-| [Xeeshan85/imc-prosperity-4-backtester](https://github.com/Xeeshan85/imc-prosperity-4-backtester) | Backtester this repo is forked from; metrics drawn from its P&L output |
-| [jmerle/imc-prosperity-3-visualizer](https://github.com/jmerle/imc-prosperity-3-visualizer) | Original upstream visualizer (Prosperity 3) |
 
 ### What the local visualizer adds
 
@@ -100,14 +93,6 @@ Global charts and cards:
 - **P&L chart** — running profit/loss per product and total.
 - **Positions chart** — position as % of limit over time (requires Logger).
 
-### Compatibility
-
-| Method | Generates `.log` files | Drag-and-drop into visualizer | `--vis` auto-opens local visualizer |
-|--------|----------------------|------------------------------|-------------------------------------|
-| **PyPI package** (`pip install -U prosperity4btx`) | ✅ | ✅ | ❌ (opens jmerle's upstream visualizer) |
-| **Repo clone** (`uv sync` in this repo) | ✅ | ✅ | ✅ (tries local dev server → built dist → upstream fallback) |
-
-The drag-and-drop workflow works identically regardless of how you installed the backtester — the `.log` format is the same in both cases. The `--vis` auto-open improvement only applies when running from the repo clone (since `open.py` in the PyPI release is not patched).
 
 ---
 
@@ -128,8 +113,12 @@ npm run dev          # → http://localhost:5173
 # 4. Open http://localhost:5173 and drag-and-drop the .log file
 ```
 
-> **Note:** `--vis` with the PyPI package opens jmerle's upstream visualizer, not the local one.
-> To use the local visualizer automatically with `--vis`, use Option B instead.
+> **Note:** `--vis` with the PyPI package tries these options in order:
+> 1. Pre-built visualizer dist (if included in package)
+> 2. [GitHub Pages hosted visualizer](https://xeeshan85.github.io/imc-prosperity-4-backtester/)
+> 3. jmerle's upstream visualizer as fallback
+>
+> To use the local dev server automatically with `--vis`, use Option B instead.
 
 ---
 
@@ -155,7 +144,8 @@ prosperity4btx your_algo.py 0 --vis
 When `--vis` is used from the repo clone, the priority order is:
 1. Local dev server at `http://localhost:5173` (if `npm run dev` is running)
 2. Pre-built `visualizer/dist/index.html` (if you ran `npm run build`)
-3. [jmerle's upstream visualizer](https://jmerle.github.io/imc-prosperity-3-visualizer/) as a fallback
+3. [GitHub Pages hosted visualizer](https://xeeshan85.github.io/imc-prosperity-4-backtester/)
+4. [jmerle's upstream visualizer](https://jmerle.github.io/imc-prosperity-3-visualizer/) as final fallback
 
 ---
 
@@ -210,4 +200,4 @@ Follow these steps if you want to make changes to the backtester:
 
 ## Acknowledgments
 
-This backtester is a port of [jmerle's Prosperity 3 backtester](https://github.com/jmerle/imc-prosperity-3-backtester) adapted for Prosperity 4. Special thanks to Jesper Merle for the original implementation.
+This backtester & Visualizer is a port of [jmerle's Prosperity 3 backtester](https://github.com/jmerle/imc-prosperity-3-backtester) & [jmerle/imc-prosperity-3-visualizer](https://github.com/jmerle/imc-prosperity-3-visualizer) adapted for Prosperity 4. Special thanks to Jesper Merle for the original implementation.

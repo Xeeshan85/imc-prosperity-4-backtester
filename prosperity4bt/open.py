@@ -57,10 +57,14 @@ def open_visualizer(output_file: Path) -> None:
         index = _VISUALIZER_DIST / "index.html"
         webbrowser.open(f"file://{index}?open={log_url}")
     else:
-        # Fallback: upstream jmerle visualizer
+        # Fallback 1: GitHub Pages hosted visualizer (Xeeshan85's version)
         webbrowser.open(
-            f"https://jmerle.github.io/imc-prosperity-3-visualizer/?open={log_url}"
+            f"https://xeeshan85.github.io/imc-prosperity-4-backtester/?open={log_url}"
         )
+        # Fallback 2: upstream jmerle visualizer (if above doesn't work)
+        # webbrowser.open(
+        #     f"https://jmerle.github.io/imc-prosperity-3-visualizer/?open={log_url}"
+        # )
 
     while not log_server.shutdown_flag:
         log_server.handle_request()
