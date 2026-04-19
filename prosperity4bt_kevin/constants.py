@@ -1,6 +1,0 @@
-LIMITS = {
-    "TOMATOES": 80,
-    "EMERALDS": 80,
-    "ASH_COATED_OSMIUM": 80,
-    "INTARIAN_PEPPER_ROOT": 80
-}
