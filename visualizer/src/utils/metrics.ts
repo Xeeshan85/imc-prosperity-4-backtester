@@ -69,14 +69,21 @@ export function computeMetrics(activityLogs: ActivityLogRow[]): BacktestMetrics 
   const variance = returns.reduce((a, b) => a + (b - mean) ** 2, 0) / n;
   const std = Math.sqrt(variance);
 
-  // Downside deviation (Sortino)
+  // Downside deviation (Sortino — only negative returns contribute)
   const downsideVariance = returns.reduce((a, b) => a + (b < 0 ? b * b : 0), 0) / n;
   const downsideStd = Math.sqrt(downsideVariance);
 
-  // Annualisation factor: sqrt(N) where N = number of return steps
-  const annFactor = Math.sqrt(n);
+  // Normalise to a "per-day" basis: the backtester runs at 100-unit intervals
+  // for 10 000 steps per day, so sqrt(10000) = 100 gives a consistent daily rate
+  // regardless of how many days are in the backtest.
+  const STEPS_PER_DAY = 10_000;
+  const annFactor = Math.sqrt(STEPS_PER_DAY);
 
-  const sharpeRatio = std > 0 ? (mean / std) * annFactor : 0;
+  // Raw (un-scaled) ratio for reference
+  const rawSharpe = std > 0 ? mean / std : 0;
+
+  // Daily-equivalent Sharpe / Sortino
+  const sharpeRatio = std > 0 ? rawSharpe * annFactor : 0;
   const sortinoRatio = downsideStd > 0 ? (mean / downsideStd) * annFactor : 0;
 
   // Max drawdown
@@ -90,7 +97,8 @@ export function computeMetrics(activityLogs: ActivityLogRow[]): BacktestMetrics 
     if (dd > maxDrawdown) maxDrawdown = dd;
   }
 
-  const maxDrawdownPct = peak > 0 ? (maxDrawdown / Math.abs(peak)) * 100 : 0;
+  // Express drawdown relative to the absolute peak so it works even when peak ≤ 0
+  const maxDrawdownPct = Math.abs(peak) > 1e-9 ? (maxDrawdown / Math.abs(peak)) * 100 : 0;
   const minPnL = Math.min(...pnlValues);
 
   // Win/loss stats

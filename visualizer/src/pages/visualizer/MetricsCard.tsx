@@ -83,12 +83,12 @@ export function MetricsCard({ activityLogs }: MetricsCardProps): ReactNode {
           color={m.minPnL < 0 ? 'red' : 'green'}
         />
         <MetricRow
-          label="Sharpe Ratio"
+          label="Sharpe (daily eq.)"
           value={formatDecimal(m.sharpeRatio, 3)}
           color={sharpeColor(m.sharpeRatio)}
         />
         <MetricRow
-          label="Sortino Ratio"
+          label="Sortino (daily eq.)"
           value={formatDecimal(m.sortinoRatio, 3)}
           color={sharpeColor(m.sortinoRatio)}
         />

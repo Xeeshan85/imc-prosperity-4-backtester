@@ -1,0 +1,56 @@
+name: Deploy Visualizer to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'visualizer/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one concurrent deployment; cancel any in-progress run
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: visualizer
+
+      - name: Build
+        run: npm run build
+        working-directory: visualizer
+        env:
+          # Set the base path to match the GH Pages sub-path:
+          # https://<owner>.github.io/imc-prosperity-4-backtester/
+          VITE_BASE_PATH: /imc-prosperity-4-backtester/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: visualizer/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

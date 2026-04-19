@@ -3,7 +3,9 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/',
+  // Use VITE_BASE_PATH env var when deploying to GitHub Pages,
+  // default to '/' for local dev and static file serving.
+  base: process.env.VITE_BASE_PATH ?? '/',
   build: {
     minify: false,
     sourcemap: true,

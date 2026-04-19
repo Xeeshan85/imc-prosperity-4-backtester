@@ -28,6 +28,7 @@ build-backend = "setuptools.build_meta"
 
 [project.scripts]
 prosperity4btx = "prosperity4bt.__main__:main"
+prosperity4mc  = "prosperity4bt.mc:main"
 
 [project.urls]
 Repository = "https://github.com/xeeshan85/imc-prosperity-4-backtester"

@@ -96,29 +96,64 @@ Global charts and cards:
 - **Positions chart** — position as % of limit over time (requires Logger).
 - **Monte Carlo page** — load a `session_summary.csv` (from the Rust MC engine) or `dashboard.json` (from `prosperity4mcbt`) to view a P&L distribution histogram, cumulative distribution (CDF), per-session scatter, and summary statistics.
 
-### Quick start
+### Compatibility
+
+| Method | Generates `.log` files | Drag-and-drop into visualizer | `--vis` auto-opens local visualizer |
+|--------|----------------------|------------------------------|-------------------------------------|
+| **PyPI package** (`pip install -U prosperity4btx`) | ✅ | ✅ | ❌ (opens jmerle's upstream visualizer) |
+| **Repo clone** (`uv sync` in this repo) | ✅ | ✅ | ✅ (tries local dev server → built dist → upstream fallback) |
+
+The drag-and-drop workflow works identically regardless of how you installed the backtester — the `.log` format is the same in both cases. The `--vis` auto-open improvement only applies when running from the repo clone (since `open.py` in the PyPI release is not patched).
+
+---
+
+### Option A — PyPI package (no repo clone needed)
 
 ```sh
-# 1. Start the local dev server
-cd visualizer
-npm install
-npm run dev          # opens http://localhost:5173
-```
+# 1. Install the backtester
+pip install -U prosperity4btx
 
-Then run your backtest as usual and drag-and-drop the `.log` file into the browser:
-
-```sh
-# Text-format log (default)
+# 2. Run your backtest — saves to backtests/<timestamp>.log
 prosperity4btx your_algo.py 0
 
-# Or open the visualizer automatically (tries local dev server first)
+# 3. Start the visualizer (one-time setup)
+cd path/to/imc-prosperity-4-backtester/visualizer
+npm install
+npm run dev          # → http://localhost:5173
+
+# 4. Open http://localhost:5173 and drag-and-drop the .log file
+```
+
+> **Note:** `--vis` with the PyPI package opens jmerle's upstream visualizer, not the local one.
+> To use the local visualizer automatically with `--vis`, use Option B instead.
+
+---
+
+### Option B — Repo clone (full `--vis` support)
+
+```sh
+# 1. Install uv (https://docs.astral.sh/uv/) then sync
+git clone https://github.com/Xeeshan85/imc-prosperity-4-backtester.git
+cd imc-prosperity-4-backtester
+uv venv && source .venv/bin/activate
+uv sync
+
+# 2. Install and start the visualizer (one-time setup)
+cd visualizer
+npm install
+npm run dev          # → http://localhost:5173
+cd ..
+
+# 3. Run your backtest — --vis tries the local dev server first
 prosperity4btx your_algo.py 0 --vis
 ```
 
-The `--vis` flag will:
-1. Try to open `http://localhost:5173` if the dev server is running.
-2. Fall back to the pre-built `visualizer/dist/index.html` if available (`npm run build`).
-3. Fall back to [jmerle's upstream visualizer](https://jmerle.github.io/imc-prosperity-3-visualizer/) as a last resort.
+When `--vis` is used from the repo clone, the priority order is:
+1. Local dev server at `http://localhost:5173` (if `npm run dev` is running)
+2. Pre-built `visualizer/dist/index.html` (if you ran `npm run build`)
+3. [jmerle's upstream visualizer](https://jmerle.github.io/imc-prosperity-3-visualizer/) as a fallback
+
+---
 
 ### Logger boilerplate (required for order/position charts)
 
@@ -128,21 +163,81 @@ Price, indicator, P&L, and metrics charts work **without** the Logger.
 
 ### Monte Carlo
 
-```sh
-# From the imc-prosperity-4 directory (Rust Monte Carlo engine):
-cd ../imc-prosperity-4
-prosperity4mcbt your_algo.py --sessions 500
+> **Important:** Monte Carlo and the backtester are **two completely separate packages from two separate repos.**
+>
+> | Package | Repo | PyPI | Requires |
+> |---------|------|------|----------|
+> | `prosperity4btx` | `imc-prosperity-4-backtester` (this repo) | ✅ `pip install -U prosperity4btx` | Python only |
+> | `prosperity4mcbt` | `imc-prosperity-4` (separate repo) | ❌ not on PyPI | Python + **Rust/Cargo** |
+>
+> The Monte Carlo engine is a **Rust binary** invoked via subprocess — you cannot `pip install` it.
 
-# Then in the visualizer, use "Load Monte Carlo results" to drag in:
-#   backtests/<timestamp>_monte_carlo/session_summary.csv
-#   or dashboard.json
+#### One-time setup for Monte Carlo
+
+```sh
+# 1. Clone the Monte Carlo repo
+git clone https://github.com/<owner>/imc-prosperity-4
+
+# 2. Install Rust (https://rustup.rs)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env          # or restart your shell
+
+# 3. Install Python dependencies (requires uv)
+pip install uv                   # if not already installed
+cd imc-prosperity-4/backtester
+uv venv && source .venv/bin/activate
+uv sync
+
+# 4. (Optional) set env var so prosperity4mc can find the repo automatically
+export PROSPERITY4MC_REPO=/path/to/imc-prosperity-4
 ```
 
-### Build (static)
+#### Running Monte Carlo
+
+**Option A — via the `prosperity4mc` shim (bundled with `prosperity4btx`)**
+
+After the one-time setup above, you can launch Monte Carlo directly from anywhere:
 
 ```sh
+# Make sure PROSPERITY4MC_REPO is set, or place both repos as siblings
+prosperity4mc your_algo.py --sessions 200 --fv-mode simulate
+```
+
+This command is installed automatically when you `pip install -U prosperity4btx`.
+It locates the `imc-prosperity-4` repo, checks that Rust and the venv are present,
+and forwards all arguments to `prosperity4mcbt`.
+
+**Option B — run directly inside the MC repo**
+
+```sh
+cd imc-prosperity-4/backtester
+source .venv/bin/activate
+prosperity4mcbt your_algo.py --sessions 200
+```
+
+#### Viewing Monte Carlo results in the visualizer
+
+```sh
+# After running Monte Carlo, load the output in the visualizer:
+# → Open http://localhost:5173  (or the GitHub Pages URL)
+# → Click "Load Monte Carlo results"
+# → Drag in one of:
+#     backtests/<timestamp>_monte_carlo/session_summary.csv   ← simpler, always present
+#     backtests/<timestamp>_monte_carlo/dashboard.json        ← full dashboard output
+```
+
+### Build (static) / GitHub Pages
+
+```sh
+# Local build
 cd visualizer
 npm run build        # output in visualizer/dist/
+
+# GitHub Pages (automatic)
+# Push to main → the deploy-visualizer.yml workflow builds and deploys to:
+# https://<owner>.github.io/imc-prosperity-4-backtester/
+#
+# Enable Pages in repo Settings → Pages → Source: "GitHub Actions"
 ```
 
 ## Data Files
