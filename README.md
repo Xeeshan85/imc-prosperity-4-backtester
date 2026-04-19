@@ -160,13 +160,7 @@ Price, indicator, P&L, and metrics charts work **without** the Logger.
 ```sh
 # Local build
 cd visualizer
-npm run build        # output in visualizer/dist/
-
-# GitHub Pages (automatic)
-# Push to main → the deploy-visualizer.yml workflow builds and deploys to:
-# https://<owner>.github.io/imc-prosperity-4-backtester/
-#
-# Enable Pages in repo Settings → Pages → Source: "GitHub Actions"
+npm run build
 ```
 
 ## Data Files
