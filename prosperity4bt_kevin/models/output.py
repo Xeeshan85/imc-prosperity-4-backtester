@@ -1,10 +1,8 @@
 import uuid
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any
 
 import orjson
-
+from typing import Any
+from dataclasses import dataclass
 from prosperity4bt.datamodel import Trade
 
 
@@ -14,6 +12,11 @@ class SandboxLogRow:
     sandbox_log: str
     lambda_log: str
 
+    def __init__(self, timestamp: int, sandbox_log: str, lambda_log: str):
+        self.timestamp = timestamp
+        self.sandbox_log = sandbox_log
+        self.lambda_log = lambda_log
+
     def with_offset(self, timestamp_offset: int) -> "SandboxLogRow":
         return SandboxLogRow(
             self.timestamp + timestamp_offset,
@@ -21,18 +24,22 @@ class SandboxLogRow:
             self.lambda_log.replace(f"[[{self.timestamp},", f"[[{self.timestamp + timestamp_offset},"),
         )
 
+    def __str__(self) -> str:
+        return orjson.dumps(
+            {
+                "sandboxLog": self.sandbox_log,
+                "lambdaLog": self.lambda_log,
+                "timestamp": self.timestamp,
+            },
+            option=orjson.OPT_APPEND_NEWLINE | orjson.OPT_INDENT_2,
+        ).decode("utf-8")
+
     def to_dict(self):
         return {
             "sandboxLog": self.sandbox_log,
             "lambdaLog": self.lambda_log,
-            "timestamp": self.timestamp,
+            "timestamp": self.timestamp
         }
-
-    def __str__(self) -> str:
-        return orjson.dumps(
-            self.to_dict(),
-            option=orjson.OPT_APPEND_NEWLINE | orjson.OPT_INDENT_2,
-        ).decode("utf-8")
 
 
 @dataclass
@@ -42,6 +49,14 @@ class ActivityLogRow:
     @property
     def timestamp(self) -> int:
         return self.columns[1]
+
+    @property
+    def symbol(self) -> str:
+        return self.columns[2]
+
+    @property
+    def profit_loss(self) -> float:
+        return self.columns[-1]
 
     def with_offset(self, timestamp_offset: int, profit_loss_offset: float) -> "ActivityLogRow":
         new_columns = self.columns[:]
@@ -110,28 +125,27 @@ class TradeRow:
 class BacktestResult:
     round_num: int
     day_num: int
-
     sandbox_logs: list[SandboxLogRow]
     activity_logs: list[ActivityLogRow]
     trades: list[TradeRow]
 
+    def __init__(self, round_num: int, day_num: int, sandbox_logs: list[SandboxLogRow]=None, activity_logs: list[ActivityLogRow]=None, trades: list[TradeRow]=None):
+        self.round_num = round_num
+        self.day_num = day_num
+        self.sandbox_logs = sandbox_logs if sandbox_logs is not None else []
+        self.activity_logs = activity_logs if activity_logs is not None else []
+        self.trades = trades if trades is not None else []
+
+    # return a list of activities that happened at the end of the day, i.e. last timestamp
+    def final_activities(self) -> list[ActivityLogRow]:
+        last_time_stamp = self.activity_logs[-1].timestamp
+        return [activity for activity in self.activity_logs if activity.timestamp == last_time_stamp]
+
+
     def to_dict(self) -> dict:
         return {
             "submissionId": str(uuid.uuid4()),
-            "activitiesLog": ActivityLogRow.get_header_str() + '\n' + '\n'.join([str(al) for al in self.activity_logs]),
+            "activitiesLog": ActivityLogRow.get_header_str() + '\n' +'\n'.join([str(al) for al in self.activity_logs]),
             "logs": [sl.to_dict() for sl in self.sandbox_logs],
-            "tradeHistory": [t.to_dict() for t in self.trades],
+            "tradeHistory": [t.to_dict() for t in self.trades]
         }
-
-
-@dataclass
-class MarketTrade:
-    trade: Trade
-    buy_quantity: int
-    sell_quantity: int
-
-
-class TradeMatchingMode(str, Enum):
-    all = "all"
-    worse = "worse"
-    none = "none"

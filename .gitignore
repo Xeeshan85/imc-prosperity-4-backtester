@@ -192,3 +192,6 @@ target/
 
 # Monte Carlo UI page (kept locally, not shipped with the public repo)
 visualizer/src/pages/montecarlo/
+properity4bt_kevin/*
+v1.py
+backtest/*

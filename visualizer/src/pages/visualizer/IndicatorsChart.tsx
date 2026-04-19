@@ -120,6 +120,7 @@ export function IndicatorsChart({ symbol }: IndicatorsChartProps): ReactNode {
     const yAxisConfig: Highcharts.YAxisOptions[] = [
       {
         // Price panel
+        opposite: false,
         labels: { align: 'right', x: -3 },
         title: { text: 'Price' },
         height: showZScore ? '72%' : '100%',
@@ -131,6 +132,7 @@ export function IndicatorsChart({ symbol }: IndicatorsChartProps): ReactNode {
     if (showZScore) {
       yAxisConfig.push({
         // Z-score sub-pane
+        opposite: false,
         labels: { align: 'right', x: -3 },
         title: { text: 'Z-Score (σ)' },
         top: '75%',

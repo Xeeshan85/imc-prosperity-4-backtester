@@ -1,3 +1,4 @@
+import json
 import sys
 from collections import defaultdict
 from datetime import datetime
@@ -127,20 +128,7 @@ def merge_results(
 def write_output(output_file: Path, merged_results: BacktestResult) -> None:
     output_file.parent.mkdir(parents=True, exist_ok=True)
     with output_file.open("w+", encoding="utf-8") as file:
-        file.write("Sandbox logs:\n")
-        for row in merged_results.sandbox_logs:
-            file.write(str(row))
-
-        file.write("\n\n\nActivities log:\n")
-        file.write(
-            "day;timestamp;product;bid_price_1;bid_volume_1;bid_price_2;bid_volume_2;bid_price_3;bid_volume_3;ask_price_1;ask_volume_1;ask_price_2;ask_volume_2;ask_price_3;ask_volume_3;mid_price;profit_and_loss\n"
-        )
-        file.write("\n".join(map(str, merged_results.activity_logs)))
-
-        file.write("\n\n\n\n\nTrade History:\n")
-        file.write("[\n")
-        file.write(",\n".join(map(str, merged_results.trades)))
-        file.write("]")
+        file.write(json.dumps(merged_results.to_dict()))
 
 
 def print_overall_summary(results: list[BacktestResult]) -> None:
@@ -184,7 +172,7 @@ app = Typer(context_settings={"help_option_names": ["--help", "-h"]})
 def cli(
     algorithm: Annotated[Path, Argument(help="Path to the Python file containing the algorithm to backtest.", show_default=False, exists=True, file_okay=True, dir_okay=False, resolve_path=True)],
     days: Annotated[list[str], Argument(help="The days to backtest on. <round>-<day> for a single day, <round> for all days in a round.", show_default=False)],
-    merge_pnl: Annotated[bool, Option("--merge-pnl", help="Merge profit and loss across days.")] = False,
+    merge_pnl: Annotated[bool, Option("--merge-pnl", help="Merge profit and loss across days.")] = True,
     vis: Annotated[bool, Option("--vis", help="Open backtest results in https://jmerle.github.io/imc-prosperity-3-visualizer/ when done.")] = False,
     out: Annotated[Optional[Path], Option(help="File to save output log to (defaults to backtests/<timestamp>.log).", show_default=False, dir_okay=False, resolve_path=True)] = None,
     no_out: Annotated[bool, Option("--no-out", help="Skip saving output log.")] = False,

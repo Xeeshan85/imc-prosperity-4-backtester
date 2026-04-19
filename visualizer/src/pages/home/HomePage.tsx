@@ -1,6 +1,11 @@
-import { Anchor, Code, Container, Stack, Text } from '@mantine/core';
-import { ReactNode } from 'react';
+import { Anchor, Code, Container, Loader, Stack, Text } from '@mantine/core';
+import { ReactNode, useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ScrollableCodeHighlight } from '../../components/ScrollableCodeHighlight.tsx';
+import { ResultLog } from '../../models.ts';
+import { useStore } from '../../store.ts';
+import { parseAlgorithmLogs } from '../../utils/algorithm.tsx';
+import { parseBacktestLog } from '../../utils/parseLog.ts';
 import { HomeCard } from './HomeCard.tsx';
 import { LoadBacktestFromFile } from './LoadFromFile.tsx';
 
@@ -154,6 +159,55 @@ class Trader:
         return result, conversions, trader_data`;
 
 export function HomePage(): ReactNode {
+  const navigate = useNavigate();
+  const setAlgorithm = useStore(state => state.setAlgorithm);
+  const [searchParams] = useSearchParams();
+  const [autoLoading, setAutoLoading] = useState(false);
+  const [autoLoadError, setAutoLoadError] = useState<string>();
+
+  useEffect(() => {
+    const openUrl = searchParams.get('open');
+    if (!openUrl) return;
+
+    setAutoLoading(true);
+    setAutoLoadError(undefined);
+
+    fetch(openUrl)
+      .then(res => {
+        if (!res.ok) throw new Error(`Failed to fetch log: ${res.status}`);
+        return res.text();
+      })
+      .then(content => {
+        let resultLog: ResultLog;
+        const trimmed = content.trim();
+        if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+          resultLog = JSON.parse(trimmed) as ResultLog;
+        } else {
+          resultLog = parseBacktestLog(content);
+        }
+
+        const algorithm = parseAlgorithmLogs(resultLog);
+        setAlgorithm(algorithm);
+        navigate('/visualizer');
+      })
+      .catch(err => {
+        setAutoLoadError(err.message ?? 'Unknown error loading log');
+        setAutoLoading(false);
+      });
+  }, [searchParams, navigate, setAlgorithm]);
+
+  if (autoLoading) {
+    return (
+      <Container>
+        <Stack align="center" mt="xl">
+          <Loader size="lg" />
+          <Text>Loading backtest log…</Text>
+          {autoLoadError && <Text c="red">{autoLoadError}</Text>}
+        </Stack>
+      </Container>
+    );
+  }
+
   return (
     <Container>
       <Stack>
