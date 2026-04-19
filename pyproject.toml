@@ -49,6 +49,7 @@ dev = [
 
 [tool.ruff]
 line-length = 120
+exclude = ["visualizer"]
 
 [tool.ruff.lint]
 extend-select = ["I"]
@@ -57,6 +58,7 @@ extend-select = ["I"]
 ignore_missing_imports = true
 explicit_package_bases = true
 namespace_packages = true
+exclude = ["visualizer"]
 
 [[tool.mypy.overrides]]
 module = "prosperity4bt.datamodel"
