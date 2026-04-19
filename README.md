@@ -79,7 +79,6 @@ This repo ships an **enhanced local visualizer** in the [`visualizer/`](./visual
 | [kevin-fu1/imc-prosperity-4-visualizer](https://github.com/kevin-fu1/imc-prosperity-4-visualizer) | Base visualizer (candlestick chart, order book chart, P&L/position charts) |
 | [Xeeshan85/imc-prosperity-4-backtester](https://github.com/Xeeshan85/imc-prosperity-4-backtester) | Backtester this repo is forked from; metrics drawn from its P&L output |
 | [jmerle/imc-prosperity-3-visualizer](https://github.com/jmerle/imc-prosperity-3-visualizer) | Original upstream visualizer (Prosperity 3) |
-| [imc-prosperity-4 (Monte Carlo engine)](../imc-prosperity-4) | Rust Monte Carlo simulator; `session_summary.csv` / `dashboard.json` are loaded by the visualizer |
 
 ### What the local visualizer adds
 
@@ -94,7 +93,6 @@ Global charts and cards:
 - **Performance Metrics** — Sharpe ratio, Sortino ratio, max drawdown (absolute and %), win rate, profit factor, avg/std return per timestep, peak/min P&L — all computed from the backtester's activity log P&L series.
 - **P&L chart** — running profit/loss per product and total.
 - **Positions chart** — position as % of limit over time (requires Logger).
-- **Monte Carlo page** — load a `session_summary.csv` (from the Rust MC engine) or `dashboard.json` (from `prosperity4mcbt`) to view a P&L distribution histogram, cumulative distribution (CDF), per-session scatter, and summary statistics.
 
 ### Compatibility
 
@@ -160,71 +158,6 @@ When `--vis` is used from the repo clone, the priority order is:
 For the order book overlay and position charts to work, your algorithm must use the `Logger` class and call `logger.flush()` at the end of `Trader.run()`. See [the upstream visualizer README](https://github.com/kevin-fu1/imc-prosperity-4-visualizer) for the full boilerplate.
 
 Price, indicator, P&L, and metrics charts work **without** the Logger.
-
-### Monte Carlo
-
-> **Important:** Monte Carlo and the backtester are **two completely separate packages from two separate repos.**
->
-> | Package | Repo | PyPI | Requires |
-> |---------|------|------|----------|
-> | `prosperity4btx` | `imc-prosperity-4-backtester` (this repo) | ✅ `pip install -U prosperity4btx` | Python only |
-> | `prosperity4mcbt` | `imc-prosperity-4` (separate repo) | ❌ not on PyPI | Python + **Rust/Cargo** |
->
-> The Monte Carlo engine is a **Rust binary** invoked via subprocess — you cannot `pip install` it.
-
-#### One-time setup for Monte Carlo
-
-```sh
-# 1. Clone the Monte Carlo repo
-git clone https://github.com/<owner>/imc-prosperity-4
-
-# 2. Install Rust (https://rustup.rs)
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-source $HOME/.cargo/env          # or restart your shell
-
-# 3. Install Python dependencies (requires uv)
-pip install uv                   # if not already installed
-cd imc-prosperity-4/backtester
-uv venv && source .venv/bin/activate
-uv sync
-
-# 4. (Optional) set env var so prosperity4mc can find the repo automatically
-export PROSPERITY4MC_REPO=/path/to/imc-prosperity-4
-```
-
-#### Running Monte Carlo
-
-**Option A — via the `prosperity4mc` shim (bundled with `prosperity4btx`)**
-
-After the one-time setup above, you can launch Monte Carlo directly from anywhere:
-
-```sh
-# Make sure PROSPERITY4MC_REPO is set, or place both repos as siblings
-prosperity4mc your_algo.py --sessions 200 --fv-mode simulate
-```
-
-This command is installed automatically when you `pip install -U prosperity4btx`.
-It locates the `imc-prosperity-4` repo, checks that Rust and the venv are present,
-and forwards all arguments to `prosperity4mcbt`.
-
-**Option B — run directly inside the MC repo**
-
-```sh
-cd imc-prosperity-4/backtester
-source .venv/bin/activate
-prosperity4mcbt your_algo.py --sessions 200
-```
-
-#### Viewing Monte Carlo results in the visualizer
-
-```sh
-# After running Monte Carlo, load the output in the visualizer:
-# → Open http://localhost:5173  (or the GitHub Pages URL)
-# → Click "Load Monte Carlo results"
-# → Drag in one of:
-#     backtests/<timestamp>_monte_carlo/session_summary.csv   ← simpler, always present
-#     backtests/<timestamp>_monte_carlo/dashboard.json        ← full dashboard output
-```
 
 ### Build (static) / GitHub Pages
 
