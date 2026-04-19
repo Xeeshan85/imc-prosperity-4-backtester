@@ -181,3 +181,11 @@ backtests/
 # Visualizer build artifacts
 visualizer/node_modules/
 visualizer/dist/
+
+# Monte Carlo implementation (lives in the separate imc-prosperity-4 repo)
+prosperity4bt/mc.py
+prosperity4mcbt/
+prosperity3bt/monte_carlo.py
+rust_simulator/
+target/
+*.cargo/

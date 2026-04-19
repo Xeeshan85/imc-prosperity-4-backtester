@@ -3,8 +3,8 @@ from functools import partial
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 from typing import Any
-from urllib.request import urlopen
 from urllib.error import URLError
+from urllib.request import urlopen
 
 # Built local visualizer lives at visualizer/dist/ relative to this package root
 _VISUALIZER_DIST = Path(__file__).resolve().parents[1] / "visualizer" / "dist"
