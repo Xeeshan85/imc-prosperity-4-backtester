@@ -1,1 +1,2 @@
 recursive-include prosperity4bt/resources *.csv
+recursive-include prosperity4bt/visualizer *

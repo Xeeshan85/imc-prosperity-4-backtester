@@ -52,6 +52,12 @@ $ prosperity4btx example/starter.py 1 --data prosperity4bt/resources
 # Print trader's output to stdout while running
 # This may be helpful when debugging a broken trader
 $ prosperity4btx example/starter.py 1 --print
+
+# Automatically open results in the interactive visualizer when done
+$ prosperity4btx example/starter.py 1 --vis
+
+# Combine multiple options
+$ prosperity4btx example/starter.py 1 2 --merge-pnl --vis --out results.log
 ```
 
 
