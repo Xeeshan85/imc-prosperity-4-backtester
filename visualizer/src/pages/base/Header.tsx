@@ -1,5 +1,5 @@
 import { Box, Container, Group, Text, Tooltip } from '@mantine/core';
-import { IconChartBar, IconHome, IconEye } from '@tabler/icons-react';
+import { IconEye, IconHome } from '@tabler/icons-react';
 import { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useStore } from '../../store.ts';
@@ -8,7 +8,6 @@ import classes from './Header.module.css';
 export function Header(): ReactNode {
   const location = useLocation();
   const algorithm = useStore(state => state.algorithm);
-  const monteCarlo = useStore(state => state.monteCarlo);
 
   const links = [
     <Link
@@ -44,29 +43,6 @@ export function Header(): ReactNode {
         <a className={`${classes.link} ${classes.linkDisabled}`}>
           <Box hiddenFrom="xs"><IconEye size={18} /></Box>
           <Box visibleFrom="xs">Visualizer</Box>
-        </a>
-      </Tooltip>,
-    );
-  }
-
-  if (monteCarlo !== null) {
-    links.push(
-      <Link
-        key="montecarlo"
-        to="/montecarlo"
-        className={classes.link}
-        data-active={location.pathname === '/montecarlo' || undefined}
-      >
-        <Box hiddenFrom="xs"><IconChartBar size={18} /></Box>
-        <Box visibleFrom="xs">Monte Carlo</Box>
-      </Link>,
-    );
-  } else {
-    links.push(
-      <Tooltip key="montecarlo" label="Load a session_summary.csv first">
-        <a className={`${classes.link} ${classes.linkDisabled}`}>
-          <Box hiddenFrom="xs"><IconChartBar size={18} /></Box>
-          <Box visibleFrom="xs">Monte Carlo</Box>
         </a>
       </Tooltip>,
     );

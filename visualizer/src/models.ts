@@ -149,30 +149,3 @@ export type CompressedAlgorithmDataRow = [
   logs: string,
 ];
 
-// Monte Carlo data structures
-export interface MonteCarloSession {
-  session_id: number;
-  total_pnl: number;
-  [key: string]: number | string;
-}
-
-export interface MonteCarloStats {
-  count: number;
-  mean: number;
-  std: number;
-  min: number;
-  p05: number;
-  p25: number;
-  p50: number;
-  p75: number;
-  p95: number;
-  max: number;
-  positiveRate: number;
-  sharpeLike: number;
-}
-
-export interface MonteCarloDashboard {
-  sessions: MonteCarloSession[];
-  stats: MonteCarloStats;
-  productStats?: Record<string, MonteCarloStats>;
-}

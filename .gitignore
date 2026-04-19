@@ -189,3 +189,6 @@ prosperity3bt/monte_carlo.py
 rust_simulator/
 target/
 *.cargo/
+
+# Monte Carlo UI page (kept locally, not shipped with the public repo)
+visualizer/src/pages/montecarlo/

@@ -78,26 +78,3 @@ export function parseBacktestLog(content: string): ResultLog {
   };
 }
 
-/**
- * Parse a Monte Carlo session_summary.csv file.
- * Returns an array of objects keyed by column name.
- */
-export function parseSessionSummaryCsv(content: string): Record<string, number>[] {
-  const lines = content.trim().split('\n');
-  if (lines.length < 2) return [];
-
-  const headers = lines[0].split(',').map(h => h.trim());
-  const rows: Record<string, number>[] = [];
-
-  for (let i = 1; i < lines.length; i++) {
-    const values = lines[i].split(',');
-    const row: Record<string, number> = {};
-    for (let j = 0; j < headers.length; j++) {
-      const v = parseFloat(values[j]);
-      row[headers[j]] = isNaN(v) ? 0 : v;
-    }
-    rows.push(row);
-  }
-
-  return rows;
-}
