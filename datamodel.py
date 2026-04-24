@@ -1,6 +1,7 @@
 import json
-from typing import Dict, List
 from json import JSONEncoder
+from typing import Dict, List
+
 import jsonpickle
 
 Time = int
