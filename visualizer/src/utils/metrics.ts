@@ -69,21 +69,20 @@ export function computeMetrics(activityLogs: ActivityLogRow[]): BacktestMetrics 
   const variance = returns.reduce((a, b) => a + (b - mean) ** 2, 0) / n;
   const std = Math.sqrt(variance);
 
-  // Downside deviation (Sortino — only negative returns contribute)
+  // Downside deviation (Sortino, target = 0).
+  // Only negative returns contribute: min(r, 0)² = r² when r < 0, else 0.
   const downsideVariance = returns.reduce((a, b) => a + (b < 0 ? b * b : 0), 0) / n;
   const downsideStd = Math.sqrt(downsideVariance);
 
-  // Normalise to a "per-day" basis: the backtester runs at 100-unit intervals
-  // for 10 000 steps per day, so sqrt(10000) = 100 gives a consistent daily rate
-  // regardless of how many days are in the backtest.
-  const STEPS_PER_DAY = 10_000;
-  const annFactor = Math.sqrt(STEPS_PER_DAY);
-
-  // Raw (un-scaled) ratio for reference
-  const rawSharpe = std > 0 ? mean / std : 0;
+  // Detect number of trading days and compute steps-per-day dynamically
+  // so multi-day and single-day backtests are both handled correctly.
+  const uniqueDays = new Set(activityLogs.map(r => r.day));
+  const numDays = Math.max(1, uniqueDays.size);
+  const stepsPerDay = Math.max(1, Math.floor(pnlValues.length / numDays));
+  const annFactor = Math.sqrt(stepsPerDay);
 
   // Daily-equivalent Sharpe / Sortino
-  const sharpeRatio = std > 0 ? rawSharpe * annFactor : 0;
+  const sharpeRatio = std > 0 ? (mean / std) * annFactor : 0;
   const sortinoRatio = downsideStd > 0 ? (mean / downsideStd) * annFactor : 0;
 
   // Max drawdown
@@ -97,8 +96,8 @@ export function computeMetrics(activityLogs: ActivityLogRow[]): BacktestMetrics 
     if (dd > maxDrawdown) maxDrawdown = dd;
   }
 
-  // Express drawdown relative to the absolute peak so it works even when peak ≤ 0
-  const maxDrawdownPct = Math.abs(peak) > 1e-9 ? (maxDrawdown / Math.abs(peak)) * 100 : 0;
+  // DD% is only meaningful when peak > 0 (equity went positive at some point)
+  const maxDrawdownPct = peak > 1e-9 ? (maxDrawdown / peak) * 100 : 0;
   const minPnL = Math.min(...pnlValues);
 
   // Win/loss stats

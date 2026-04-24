@@ -171,10 +171,13 @@ Data for the following rounds is included:
 - Round 2: Prices and trades data on INTARIAN_PEPPER_ROOT and ASH_COATED_OSMIUM products.
 
 **Product Limits for Prosperity 4:**
-- EMERALDS: 80
-- TOMATOES: 80
-- INTARIAN_PEPPER_ROOT: 80
-- ASH_COATED_OSMIUM: 80
+- `EMERALDS`: 80
+- `TOMATOES`: 80
+- `INTARIAN_PEPPER_ROOT`: 80
+- `ASH_COATED_OSMIUM`: 80
+- `HYDROGEL_PACK`: 200
+- `VELVETFRUIT_EXTRACT`: 200
+- `VELVETFRUIT_EXTRACT_VOUCHER`: 300
 
 Conversions are not supported in this version.
 

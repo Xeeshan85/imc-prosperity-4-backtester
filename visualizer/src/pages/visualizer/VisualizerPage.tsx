@@ -9,6 +9,7 @@ import { MetricsCard } from './MetricsCard.tsx';
 import { OrdersChart } from './OrdersChart.tsx';
 import { PositionChart } from './PositionChart.tsx';
 import { ProfitLossChart } from './ProfitLossChart.tsx';
+import { TimestampsCard } from './TimestampsCard.tsx';
 import { VisualizerCard } from './VisualizerCard.tsx';
 
 export function VisualizerPage(): ReactNode {
@@ -86,6 +87,13 @@ export function VisualizerPage(): ReactNode {
 
         {/* Per-product charts: Candlestick (simple), Orders (algo), Indicators (simple) */}
         {symbolColumns}
+
+        {/* Iterative Visualizer: step through timestamps */}
+        {hasAlgoData && (
+          <Grid.Col span={12}>
+            <TimestampsCard />
+          </Grid.Col>
+        )}
       </Grid>
     </Container>
   );
