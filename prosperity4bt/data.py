@@ -22,6 +22,66 @@ LIMITS = {
     'VEV_5500': 300,
     'VEV_6000': 300,
     'VEV_6500': 300,
+    # Galaxy Sounds Recorders
+    "GALAXY_SOUNDS_DARK_MATTER": 10,
+    "GALAXY_SOUNDS_BLACK_HOLES": 10,
+    "GALAXY_SOUNDS_PLANETARY_RINGS": 10,
+    "GALAXY_SOUNDS_SOLAR_WINDS": 10,
+    "GALAXY_SOUNDS_SOLAR_FLAMES": 10,
+    # Vertical Sleeping Pods
+    "SLEEP_POD_SUEDE": 10,
+    "SLEEP_POD_LAMB_WOOL": 10,
+    "SLEEP_POD_POLYESTER": 10,
+    "SLEEP_POD_NYLON": 10,
+    "SLEEP_POD_COTTON": 10,
+    # Organic Microchips
+    "MICROCHIP_CIRCLE": 10,
+    "MICROCHIP_OVAL": 10,
+    "MICROCHIP_SQUARE": 10,
+    "MICROCHIP_RECTANGLE": 10,
+    "MICROCHIP_TRIANGLE": 10,
+    # Purification Pebbles
+    "PEBBLES_XS": 10,
+    "PEBBLES_S": 10,
+    "PEBBLES_M": 10,
+    "PEBBLES_L": 10,
+    "PEBBLES_XL": 10,
+    # Domestic Robots
+    "ROBOT_VACUUMING": 10,
+    "ROBOT_MOPPING": 10,
+    "ROBOT_DISHES": 10,
+    "ROBOT_LAUNDRY": 10,
+    "ROBOT_IRONING": 10,
+    # UV-Visors
+    "UV_VISOR_YELLOW": 10,
+    "UV_VISOR_AMBER": 10,
+    "UV_VISOR_ORANGE": 10,
+    "UV_VISOR_RED": 10,
+    "UV_VISOR_MAGENTA": 10,
+    # Instant Translators
+    "TRANSLATOR_SPACE_GRAY": 10,
+    "TRANSLATOR_ASTRO_BLACK": 10,
+    "TRANSLATOR_ECLIPSE_CHARCOAL": 10,
+    "TRANSLATOR_GRAPHITE_MIST": 10,
+    "TRANSLATOR_VOID_BLUE": 10,
+    # Construction Panels
+    "PANEL_1X2": 10,
+    "PANEL_2X2": 10,
+    "PANEL_1X4": 10,
+    "PANEL_2X4": 10,
+    "PANEL_4X4": 10,
+    # Liquid Breath Oxygen Shakes
+    "OXYGEN_SHAKE_MORNING_BREATH": 10,
+    "OXYGEN_SHAKE_EVENING_BREATH": 10,
+    "OXYGEN_SHAKE_MINT": 10,
+    "OXYGEN_SHAKE_CHOCOLATE": 10,
+    "OXYGEN_SHAKE_GARLIC": 10,
+    # Protein Snack Packs
+    "SNACKPACK_CHOCOLATE": 10,
+    "SNACKPACK_VANILLA": 10,
+    "SNACKPACK_PISTACHIO": 10,
+    "SNACKPACK_STRAWBERRY": 10,
+    "SNACKPACK_RASPBERRY": 10,
 }
 
 
@@ -136,13 +196,17 @@ def read_day_data(file_reader: FileReader, round_num: int, day_num: int, no_name
             for line in file.read_text(encoding="utf-8").splitlines()[1:]:
                 columns = line.split(";")
 
+                # Strip buyer/seller names if no_names is True
+                buyer = "" if no_names else columns[1]
+                seller = "" if no_names else columns[2]
+
                 trades.append(
                     Trade(
                         symbol=columns[3],
                         price=int(float(columns[5])),
                         quantity=int(columns[6]),
-                        buyer=columns[1],
-                        seller=columns[2],
+                        buyer=buyer,
+                        seller=seller,
                         timestamp=int(columns[0]),
                     )
                 )

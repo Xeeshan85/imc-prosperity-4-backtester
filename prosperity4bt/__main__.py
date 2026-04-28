@@ -181,6 +181,7 @@ def cli(
     match_trades: Annotated[TradeMatchingMode, Option(help="How to match orders against market trades. 'all' matches trades with prices equal to or worse than your quotes, 'worse' matches trades with prices worse than your quotes, 'none' does not match trades against orders at all.")] = TradeMatchingMode.all,
     no_progress: Annotated[bool, Option("--no-progress", help="Don't show progress bars.")] = False,
     original_timestamps: Annotated[bool, Option("--original-timestamps", help="Preserve original timestamps in output log rather than making them increase across days.")] = False,
+    no_names: Annotated[bool, Option("--no-names", help="Strip buyer/seller counterparty names from trade data. By default names are kept (available from Round 4 onwards).")] = False,
     version: Annotated[bool, Option("--version", "-v", help="Show the program's version number and exit.", is_eager=True, callback=version_callback)] = False,
 ) -> None:  # fmt: skip
     if out is not None and no_out:
@@ -216,7 +217,7 @@ def cli(
             day_num,
             print_output,
             match_trades,
-            True,
+            no_names,
             show_progress_bars,
         )
 

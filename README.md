@@ -169,15 +169,18 @@ Data for the following rounds is included:
 - Round 0: Tutorial round with prices and anonymized trades data on EMERALDS and TOMATOES. This is the introductory round to learn the basics of the algorithm.
 - Round 1: Prices and trades data on INTARIAN_PEPPER_ROOT and ASH_COATED_OSMIUM products.
 - Round 2: Prices and trades data on INTARIAN_PEPPER_ROOT and ASH_COATED_OSMIUM products.
+- Round 3: Prices and trades data with buyer/seller counterparty information on HYDROGEL_PACK and VELVETFRUIT_EXTRACT products.
+- Round 4: Prices and trades data with counterparty information on 12 VELVETFRUIT_EXTRACT_VOUCHER variants.
+- Round 5: Prices and trades data with counterparty information on 50 diverse products across 10 categories (Galaxy Sounds, Sleep Pods, Microchips, Pebbles, Robots, UV Visors, Translators, Panels, Oxygen Shakes, and Snack Packs).
 
 **Product Limits for Prosperity 4:**
-- `EMERALDS`: 80
-- `TOMATOES`: 80
-- `INTARIAN_PEPPER_ROOT`: 80
-- `ASH_COATED_OSMIUM`: 80
-- `HYDROGEL_PACK`: 200
-- `VELVETFRUIT_EXTRACT`: 200
-- `VELVETFRUIT_EXTRACT_VOUCHER`: 300
+
+| Product Category | Products | Limit |
+|---|---|---|
+| Rounds 0-2 | EMERALDS, TOMATOES, INTARIAN_PEPPER_ROOT, ASH_COATED_OSMIUM | 80 |
+| Rounds 3-4 | HYDROGEL_PACK, VELVETFRUIT_EXTRACT | 200 |
+| Rounds 3-4 | VELVETFRUIT_EXTRACT_VOUCHER variants (VEV_4000 - VEV_6500) | 300 |
+| Round 5 | Galaxy Sounds, Sleep Pods, Microchips, Pebbles, Robots, UV Visors, Translators, Panels, Oxygen Shakes, Snack Packs | 10 |
 
 Conversions are not supported in this version.
 
