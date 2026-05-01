@@ -60,11 +60,9 @@ export function VisualizerPage(): ReactNode {
         <Grid.Col span={{ xs: 12, sm: 6 }}>
           <ProfitLossChart symbols={sortedSymbols} />
         </Grid.Col>
-        {hasAlgoData && (
-          <Grid.Col span={{ xs: 12, sm: 6 }}>
-            <PositionChart symbols={sortedSymbols} />
-          </Grid.Col>
-        )}
+        <Grid.Col span={{ xs: 12, sm: 6 }}>
+          <PositionChart symbols={sortedSymbols} />
+        </Grid.Col>
 
         {/* Product selector dropdown */}
         <Grid.Col span={12}>

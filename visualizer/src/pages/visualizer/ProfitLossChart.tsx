@@ -1,5 +1,6 @@
+import { Button, Group, Text } from '@mantine/core';
 import Highcharts from 'highcharts';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { useStore } from '../../store.ts';
 import { Chart } from './Chart.tsx';
 
@@ -7,8 +8,14 @@ export interface ProfitLossChartProps {
   symbols: string[];
 }
 
+const PAGE_SIZE = 8;
+
 export function ProfitLossChart({ symbols }: ProfitLossChartProps): ReactNode {
   const algorithm = useStore(state => state.algorithm)!;
+  const [page, setPage] = useState(0);
+
+  const totalPages = Math.max(1, Math.ceil(symbols.length / PAGE_SIZE));
+  const pageSymbols = symbols.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
   const dataByTimestamp = new Map<number, number>();
   for (const row of algorithm.activityLogs) {
@@ -24,7 +31,7 @@ export function ProfitLossChart({ symbols }: ProfitLossChartProps): ReactNode {
     },
   ];
 
-  symbols.forEach(symbol => {
+  pageSymbols.forEach(symbol => {
     const data: [number, number][] = [];
     for (const row of algorithm.activityLogs) {
       if (row.product === symbol) data.push([row.timestamp, row.profitLoss]);
@@ -32,5 +39,19 @@ export function ProfitLossChart({ symbols }: ProfitLossChartProps): ReactNode {
     series.push({ type: 'line', name: symbol, data, dashStyle: 'Dash' });
   });
 
-  return <Chart title="Profit / Loss" series={series} />;
+  const controls = totalPages > 1 ? (
+    <Group gap="xs" align="center">
+      <Button size="xs" variant="light" disabled={page === 0} onClick={() => setPage(p => p - 1)}>
+        ◀ Prev
+      </Button>
+      <Text size="xs" c="dimmed">
+        {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, symbols.length)} of {symbols.length}
+      </Text>
+      <Button size="xs" variant="light" disabled={page >= totalPages - 1} onClick={() => setPage(p => p + 1)}>
+        Next ▶
+      </Button>
+    </Group>
+  ) : undefined;
+
+  return <Chart title="Profit / Loss" series={series} controls={controls} />;
 }
